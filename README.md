@@ -8,5 +8,11 @@ https://platform.openai.com/api-keys
 Install
 
 ```
-pip install -r requirements.txt
+python -m pip install --user -r requirements.txt
+```
+
+Run
+
+```
+python -m streamlit run chatbot.py
 ```
