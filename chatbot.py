@@ -3,7 +3,7 @@ import streamlit as st
 import pandas as pd
 from openai import OpenAI
 
-st.title("ChatGPT Clone")
+st.title("Data Analysis Chatbot")
 
 uploaded_file = st.file_uploader("Upload your CSV")
 if uploaded_file is not None:
