@@ -1,3 +1,4 @@
+import numpy as np
 import streamlit as st
 import pandas as pd
 from openai import OpenAI
@@ -7,10 +8,14 @@ st.title("ChatGPT Clone")
 uploaded_file = st.file_uploader("Upload your CSV")
 if uploaded_file is not None:
     df = pd.read_csv(uploaded_file)
-    st.text("Uploaded Data Sample")
-    st.write(df.head())
-    st.text("Uploaded Data Stats")
+    st.text("Data Sample") 
+    st.write(df.head()) 
+    st.text("Data Stats")
     st.write(df.describe())
+    numeric_df = df.select_dtypes(include=[np.number])
+    correlation_matrix = numeric_df.corr()
+    st.text("Data Correlation Matrix")
+    st.write(correlation_matrix)
 
 # initialize openAI client
 client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
