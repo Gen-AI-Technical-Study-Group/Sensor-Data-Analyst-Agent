@@ -1,11 +1,6 @@
 import streamlit as st
 import pandas as pd
 from openai import OpenAI
-import os
-
-from dotenv import load_dotenv
-
-load_dotenv(".env")
 
 st.title("ChatGPT Clone")
 
@@ -18,7 +13,7 @@ if uploaded_file is not None:
     st.write(df.describe())
 
 # initialize openAI client
-client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
+client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
 # Set a default model
 if "openai_model" not in st.session_state:
     st.session_state["openai_model"] = "gpt-3.5-turbo"
@@ -34,19 +29,20 @@ for message in st.session_state.messages:
 
 # Accept user input
 if prompt := st.chat_input("What questions can I answer about this data?"):
-    # Add user message to chat history
+    # Add dataset converted to a string to the prompt
     added_context = [
         "I have the following dataset.",
         df.to_string(),
-        "I want you to help me answer questions regarding this data.",
+        "I want you to help me answer questions regarding this data. When you answer, don't show your process, just give me the answer.",
         prompt,
     ]
-    prompt_with_context = f"\n".join(added_context)
+    prompt_with_context = "\n".join(added_context)
+    # Add user message to chat history
     st.session_state.messages.append({"role": "user", "content": prompt_with_context})
     # Display user message in chat message container
     with st.chat_message("user"):
         st.markdown(prompt)
-
+    print(len(st.session_state.messages))
     # Display assistant response in chat message container
     with st.chat_message("assistant"):
         stream = client.chat.completions.create(
