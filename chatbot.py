@@ -5,14 +5,16 @@ from openai import OpenAI
 
 st.title("Data Analysis Chatbot")
 
+# Handle file upload
 uploaded_file = st.file_uploader("Upload your CSV")
 if uploaded_file is not None:
-    df = pd.read_csv(uploaded_file)
+    
+    df = pd.read_csv(uploaded_file) # convert uploaded CSV file to data frame
     st.text("Data Sample") 
-    st.write(df.head()) 
+    st.write(df.head()) # Give Sample of data frame
     st.text("Data Stats")
-    st.write(df.describe())
-    numeric_df = df.select_dtypes(include=[np.number])
+    st.write(df.describe()) # Give overview of dataframe statistics
+    numeric_df = df.select_dtypes(include=[np.number]) # Show correlation of numeric columns
     correlation_matrix = numeric_df.corr()
     st.text("Data Correlation Matrix")
     st.write(correlation_matrix)
@@ -47,7 +49,6 @@ if prompt := st.chat_input("What questions can I answer about this data?"):
     # Display user message in chat message container
     with st.chat_message("user"):
         st.markdown(prompt)
-    print(len(st.session_state.messages))
     # Display assistant response in chat message container
     with st.chat_message("assistant"):
         stream = client.chat.completions.create(
